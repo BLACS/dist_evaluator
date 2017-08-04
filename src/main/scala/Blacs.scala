@@ -103,10 +103,10 @@ object Blacs {
 
   def init() = {
     val l = List(
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 0, 4, 1, 1)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 1, 4, 1, 2)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 2, 4, 1, 3)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 3, 4, 1, 4))
+      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 0, 4, 4, 1)),
+      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 1, 3, 1, 2)),
+      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 2, 3, 1, 3)),
+      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 3, 3, 1, 4))
     )
     val wr = WriteRequest(tag, 0, Coordinates(0, 0), 4, 4, l)
     io_api.writeSheet(sheet, wr)

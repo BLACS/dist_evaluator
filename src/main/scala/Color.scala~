@@ -1,4 +1,0 @@
-sealed abstract class Color {
-  case class Black() extends Color
-  case class White() extends Color
-}

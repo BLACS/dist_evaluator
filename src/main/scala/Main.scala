@@ -75,8 +75,8 @@ object Main {
   def dependencies(formulas: List[LocatedCell], d: Definition) =
     d match {
       case Definition("count", List(c, r, l, w, _), _) => {
-        val inf = Coordinates(c, r)
-        val sup = Coordinates(c + l, r + w)
+        val inf = Coordinates(c,r)
+        val sup = Coordinates(c+l-1,r+w-1)
         def range(c: LocatedCell) = {
           (inf <= c.coords) && (c.coords <= sup)
         }

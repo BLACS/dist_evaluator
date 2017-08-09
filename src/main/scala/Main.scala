@@ -107,11 +107,12 @@ object Main {
   }
 
   def main(args: Array[String]): Unit = {
-    Blacs.init
-    val time = Blacs.get_time
-    val size = Blacs.get_size
-    val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
-    def f(c:LocatedCell) = eval_formula(formulas, c)
-    formulas.foreach(f)
+    // Blacs.init
+    // val time = Blacs.get_time
+    // val size = Blacs.get_size
+    // val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
+    // def f(c:LocatedCell) = eval_formula(formulas, c)
+    // formulas.foreach(f)
+    DistEvaluator.main(args)
   }
 }

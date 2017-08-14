@@ -8,16 +8,16 @@ import io.swagger.client.api.LocatedCellList
 import java.util.NoSuchElementException
 
 sealed abstract class Color
-final case class Black() extends Color
-final case class White() extends Color
+final case object Black extends Color
+final case object White extends Color
 
-final case class Not_well_defined() extends Exception
+final case object Not_well_defined extends Exception
 
 object Main {
   var marks = new HashMap[Coordinates, Color]()
 
   def assign_cell(coords: Coordinates, cell: Cell) = {
-    Blacs.write(0, coords, 1, 1, List(cell))
+    Blacs.write(0, coords, 1, 1, cell::Nil)
     mark_cell_as_evaluated(coords)
   }
 
@@ -26,39 +26,30 @@ object Main {
     assign_cell(coords, cell)
   }
 
-  def mark_cell_as_being_evaluated(c: Coordinates) =
-    marks += ((c, Black()))
+  def mark_cell_as_being_evaluated(c: Coordinates) = marks += ((c, Black))
 
-  def mark_cell_as_evaluated(c: Coordinates) =
-    marks += ((c, White()))
+  def mark_cell_as_evaluated(c: Coordinates) = marks += ((c, White))
 
   def is_being_evaluated(c: Coordinates) =
-    try marks(c) match {
-      case Black() => true
-      case _ => false
-    } catch {
+    try
+      marks(c) == Black
+    catch {
       case e: NoSuchElementException => false
     }
 
   def is_evaluated(c: Coordinates) =
-    try marks(c) match {
-      case White() => true
-      case _ => false
-    } catch {
+    try
+      marks(c) == White
+    catch {
       case e: NoSuchElementException => false
     }
 
-  def count(i: Int, cells: List[LocatedCell]) = {
-    var x = 0
-    def aux(c: LocatedCell) =
-      c match {
-        case LocatedCell(Cell(_, Value("int", v)), _) =>
-          if (i == v) { x += 1 }
-        case _ => ()
-      }
-    cells.foreach(aux)
-    x
-  }
+  def count(i: Int, cells: List[LocatedCell]) =
+    cells.foldLeft(0)((acc, c) => c match {
+      case LocatedCell(Cell(_, Value("int", v)), _) if (v==i) =>
+          acc + 1
+      case _ => acc
+    })
 
   def eval_formula_definition(f: Definition) =
     f match {
@@ -66,23 +57,18 @@ object Main {
         val cells = (Blacs.read(0, Coordinates(c, r), l, w))
         val i = count(v, cells.l)
         Blacs.cell(Some(i), f)
-       }
-      case _ => {
-        Blacs.cell(None, f)
       }
+      case _ => Blacs.cell(None, f)
     }
 
   def dependencies(formulas: List[LocatedCell], d: Definition) =
     d match {
       case Definition("count", List(c, r, l, w, _), _) => {
-        val inf = Coordinates(c,r)
-        val sup = Coordinates(c+l-1,r+w-1)
-        def range(c: LocatedCell) = {
-          (inf <= c.coords) && (c.coords <= sup)
-        }
-        formulas.filter(range)
+        val inf = Coordinates(c, r)
+        val sup = Coordinates(c + l - 1, r + w - 1)
+        formulas.filter(c => (inf <= c.coords) && (c.coords <= sup))
       }
-      case _ => List()
+      case _ => Nil
     }
 
   def eval_formula(formulas: List[LocatedCell], lcell: LocatedCell): Unit = {
@@ -92,27 +78,25 @@ object Main {
       ()
     else if (is_being_evaluated(coords)) {
       error(coords, definition)
-      throw Not_well_defined()
+      throw Not_well_defined
     } else {
       mark_cell_as_being_evaluated(coords)
       try {
         val deps = dependencies(formulas, definition)
-        def f(c: LocatedCell) = eval_formula(formulas, c)
-        deps.foreach(f)
+        deps.foreach(c => eval_formula(formulas, c))
         assign_cell(coords, (eval_formula_definition(definition)))
       } catch {
-        case e: Not_well_defined => ()
+        case Not_well_defined => ()
       }
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    // Blacs.init
-    // val time = Blacs.get_time
-    // val size = Blacs.get_size
-    // val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
-    // def f(c:LocatedCell) = eval_formula(formulas, c)
-    // formulas.foreach(f)
-    DistEvaluator.main(args)
-  }
+  // def main(args: Array[String]): Unit = {
+  //   // Blacs.init
+  //   // val time = Blacs.get_time
+  //   // val size = Blacs.get_size
+  //   // val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
+  //   // formulas.foreach(c => eval_formula(formulas, c))
+  //   DistEvaluator.main(args)
+  // }
 }

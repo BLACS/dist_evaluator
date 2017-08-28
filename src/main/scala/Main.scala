@@ -92,11 +92,10 @@ object Main {
   }
 
   // def main(args: Array[String]): Unit = {
-  //   // Blacs.init
-  //   // val time = Blacs.get_time
-  //   // val size = Blacs.get_size
-  //   // val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
-  //   // formulas.foreach(c => eval_formula(formulas, c))
-  //   DistEvaluator.main(args)
+  //   Blacs.init
+  //   val time = Blacs.get_time
+  //   val size = Blacs.get_size
+  //   val formulas = (Blacs.read_formulas(time, size._1, size._2)).l
+  //   formulas.foreach(c => eval_formula(formulas, c))
   // }
 }

@@ -14,7 +14,7 @@ import java.time.Instant
 
 object Blacs {
 
-  val host = "http://172.17.0.2:8080"
+  val host = "http://localhost:8080"
   val io_api = new IoApi(host)
   val clock_api = new ClockApi(host)
   val sheet = "noname"
@@ -103,12 +103,24 @@ object Blacs {
 
   def init() = {
     val l = List(
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 0, 4, 4, 1)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 1, 3, 1, 2)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 2, 3, 1, 3)),
-      cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 3, 3, 1, 4))
+      cell(None, count_def(3, 0, 1, 1, 1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 1, 4, 1, 1)),
+      cell(None, count_def(0,0,1,1,1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(Some(4), int_def(4))
     )
-    val wr = WriteRequest(tag, 0, Coordinates(0, 0), 4, 4, l)
+    val l2 = List( cell(None, none_def))
+    val l3 = List(cell(Some(7), int_def(7)))
+    val wr  = WriteRequest(tag, 0, Coordinates(0, 0), 4, 2, l)
+    val wr2 = WriteRequest(tag, 1, Coordinates(0, 1), 1, 1, l2)
+    val wr3 = WriteRequest(tag, 1, Coordinates(1, 1), 1, 1, l3)
     io_api.writeSheet(sheet, wr)
+    io_api.writeSheet(sheet, wr2)
+    //io_api.writeSheet(sheet, wr3)
   }
 }
+
+
+// val l = List(
+//   cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 0, 4, 4, 1)),
+//   cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 1, 3, 1, 2)),
+//   cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 2, 3, 1, 3)),
+//   cell(Some(1), int_def(1)), cell(Some(2), int_def(2)), cell(Some(3), int_def(3)), cell(None, count_def(0, 3, 3, 1, 4))
+// )
